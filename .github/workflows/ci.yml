@@ -84,5 +84,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build application stack
-        run: docker compose build
+      - name: Build backend image
+        run: docker build -t ghcr.io/exeaman/notes-backend:${{ github.sha }} ./backend
+
+      - name: Push backend image
+        run: docker push ghcr.io/exeaman/notes-backend:${{ github.sha }}
