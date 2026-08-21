@@ -89,3 +89,9 @@ jobs:
 
       - name: Push backend image
         run: docker push ghcr.io/exeaman/notes-backend:${{ github.sha }}
+
+      - name: Build frontend image
+        run: docker build -t ghcr.io/exeaman/notes-frontend:${{ github.sha }} ./frontend
+
+      - name: Push frontend image
+        run: docker push ghcr.io/exeaman/notes-frontend:${{ github.sha }}
