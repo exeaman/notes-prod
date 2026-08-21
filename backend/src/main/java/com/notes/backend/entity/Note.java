@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Table(name = "notes")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Note {
