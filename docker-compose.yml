@@ -1,16 +1,14 @@
 services:
+
   postgres:
     image: postgres:17
     container_name: notes-postgres
-
     environment:
       POSTGRES_DB: notes_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
     volumes:
       - notes-postgres-data:/var/lib/postgresql/data
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d notes_db"]
       interval: 5s
@@ -18,28 +16,28 @@ services:
       retries: 5
 
   backend:
-    image: notes-backend:v2
+    build:
+      context: ./backend
     container_name: notes-backend
-
     ports:
       - "8080:8080"
-
     environment:
       SPRING_PROFILES_ACTIVE: dev
       DATABASE_URL: jdbc:postgresql://postgres:5432/notes_db
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
-
     depends_on:
       postgres:
         condition: service_healthy
-  frontend:
-    image: notes-frontend:v3
-    container_name: notes-frontend
 
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api/notes
+    container_name: notes-frontend
     ports:
       - "3000:80"
-
     depends_on:
       - backend
 
